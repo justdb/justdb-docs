@@ -1,68 +1,49 @@
-name: Deploy to GitHub Pages
+name: docs
 
 on:
-  # 在推送到 main 分支时触发
+  # trigger deployment on every push to main branch
   push:
-    branches: [main, master]
-  # 允许手动运行工作流
+    branches: [main]
+  # trigger deployment manually
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: 'pages'
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    name: Deploy to GitHub Pages
+  docs:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Install Node.js
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # fetch all commits to get last updated time or other git log info
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          # choose node.js version to use
+          node-version: 22
+          # cache deps for pnpm
+          cache: pnpm
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build static files
+      # run build script
+      - name: Build VuePress site
         run: pnpm docs:build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vuepress/dist
-
+      # please check out the docs of the workflow for more details
+      # @see https://github.com/crazy-max/ghaction-github-pages
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          # deploy to gh-pages branch
+          target_branch: gh-pages
+          # deploy the default output dir of VuePress
+          build_dir: docs/.vuepress/dist
+        env:
+          # @see https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
