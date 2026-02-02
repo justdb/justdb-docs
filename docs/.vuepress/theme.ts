@@ -218,7 +218,7 @@ export default hopeTheme({
       provider: "Giscus",
       repo: "justdb/justdb-docs",
       repoId: "R_kgDORGhTog",
-      category: "Q&A",
+      category: "Announcements",
       categoryId: "DIC_kwDORGhTos4C1wGH",
     },
     // 组件插件
