@@ -6,6 +6,9 @@ export default defineUserConfig({
   base: '/',
   title: 'VuePress Starter',
   description: 'VuePress Starter Project in Stackblitz',
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
+  ],
   port: 8081,
 
   bundler: viteBundler({
