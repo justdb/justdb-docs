@@ -22,7 +22,7 @@
 
 ### 基础路径配置
 
-当前配置的 `base` 路径为 `/vuepress-izvrnrbt/`，对应于仓库名称。如果您更改了仓库名称，请相应地更新 `docs/.vuepress/config.ts` 中的 `base` 配置。
+当前配置的 `base` 路径为 `/`，对应于仓库名称。如果您更改了仓库名称，请相应地更新 `docs/.vuepress/config.ts` 中的 `base` 配置。
 
 ### 手动部署
 

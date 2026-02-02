@@ -1,0 +1,15 @@
+{
+  "search.exclude": {
+    "**/docs/.vuepress/.temp": true,
+    "**/.temp/**": true,
+    "**/.temp": true
+  },
+  "files.watcherExclude": {
+    "**/docs/.vuepress/.temp/**": true,
+    "**/.temp/**": true
+  },
+  "files.exclude": {
+    "**/docs/.vuepress/.temp": true,
+    "**/.temp/**": true
+  }
+}
